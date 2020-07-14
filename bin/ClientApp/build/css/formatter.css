@@ -1,0 +1,292 @@
+/****** Opacity *******/
+.op-100 {
+  opacity: 1 !important;
+}
+.op-95 {
+  opacity: 0.95 !important;
+}
+.op-90 {
+  opacity: 0.9 !important;
+}
+.op-85 {
+  opacity: 0.85 !important;
+}
+.op-80 {
+  opacity: 0.8 !important;
+}
+.op-75 {
+  opacity: 0.75 !important;
+}
+.op-70 {
+  opacity: 0.7 !important;
+}
+.op-65 {
+  opacity: 0.65 !important;
+}
+.op-60 {
+  opacity: 0.6 !important;
+}
+.op-55 {
+  opacity: 0.55 !important;
+}
+.op-50 {
+  opacity: 0.5 !important;
+}
+.op-45 {
+  opacity: 0.45 !important;
+}
+.op-40 {
+  opacity: 0.4 !important;
+}
+.op-35 {
+  opacity: 0.35 !important;
+}
+.op-30 {
+  opacity: 0.3 !important;
+}
+.op-25 {
+  opacity: 0.25 !important;
+}
+.op-20 {
+  opacity: 0.2 !important;
+}
+.op-15 {
+  opacity: 0.15 !important;
+}
+.op-10 {
+  opacity: 0.1 !important;
+}
+.op-5 {
+  opacity: 0.05 !important;
+}
+.op-0 {
+  opacity: 0 !important;
+}
+/****** Font *******/
+.font-10x {
+  font-size: 10em !important;
+}
+.font-9x {
+  font-size: 9em !important;
+}
+.font-8x {
+  font-size: 8em !important;
+}
+.font-7x {
+  font-size: 7em !important;
+}
+.font-6x {
+  font-size: 6em !important;
+}
+.font-5x {
+  font-size: 5em !important;
+}
+.font-4x {
+  font-size: 4em !important;
+}
+.font-3x {
+  font-size: 3em !important;
+}
+.font-2x {
+  font-size: 2em !important;
+}
+.font-1x {
+  font-size: 1em !important;
+}
+.font-0_9x {
+  font-size: 0.9em !important;
+}
+.font-0_8x {
+  font-size: 0.8em !important;
+}
+.font-0_7x {
+  font-size: 0.7em !important;
+}
+.font-0_6x {
+  font-size: 0.6em !important;
+}
+.font-0_5x {
+  font-size: 0.5em !important;
+}
+.font-0_4x {
+  font-size: 0.4em !important;
+}
+.font-0_3x {
+  font-size: 0.3em !important;
+}
+.font-0_2x {
+  font-size: 0.2em !important;
+}
+.font-0_1x {
+  font-size: 0.1em !important;
+}
+.font-1_9x {
+  font-size: 1.9em !important;
+}
+.font-1_8x {
+  font-size: 1.8em !important;
+}
+.font-1_7x {
+  font-size: 1.7em !important;
+}
+.font-1_6x {
+  font-size: 1.6em !important;
+}
+.font-1_5x {
+  font-size: 1.5em !important;
+}
+.font-1_4x {
+  font-size: 1.4em !important;
+}
+.font-1_3x {
+  font-size: 1.3em !important;
+}
+.font-1_2x {
+  font-size: 1.2em !important;
+}
+.font-1_1x {
+  font-size: 1.1em !important;
+}
+.bold {
+  font-weight: bold;
+}
+.not-bold {
+  font-weight: normal;
+}
+.bold600 {
+  font-weight: 600;
+}
+/****** Borders*******/
+.rounded {
+  border-radius: 4px;
+}
+.border-1 {
+  border: 1px solid black;
+}
+/****** Styles *******/
+.block {
+  display: block;
+}
+.inline-block {
+  display: inline-block;
+}
+.hidden,
+.hide {
+  display: none;
+}
+.clear {
+  clear: both;
+}
+.no-border {
+  border-width: 0 !important;
+}
+.no-radius {
+  border-radius: 0;
+}
+.no-margin {
+  margin: 0 !important;
+}
+.no-padding {
+  padding: 0 !important;
+}
+.padding-10px {
+  padding: 10px !important;
+}
+.padding-9px {
+  padding: 9px !important;
+}
+.padding-8px {
+  padding: 8px !important;
+}
+.padding-7px {
+  padding: 7px !important;
+}
+.padding-6px {
+  padding: 6px !important;
+}
+.padding-5px {
+  padding: 5px !important;
+}
+.padding-4px {
+  padding: 4px !important;
+}
+.padding-3px {
+  padding: 3px !important;
+}
+.padding-2px {
+  padding: 2px !important;
+}
+.padding-1px {
+  padding: 1px !important;
+}
+.margin-5px {
+  margin: 5px;
+}
+.margin-10px {
+  margin: 10px;
+}
+/***** Positions *******/
+.position-fixed {
+  position: fixed;
+}
+.bottom {
+  bottom: 0;
+}
+.top {
+  top: 0;
+}
+.left {
+  left: 0;
+}
+.right {
+  right: 0;
+}
+.center-horizontal {
+  left: 50%;
+}
+.center-vertical {
+  top: 50%;
+}
+.z1000 {
+  z-index: 1000;
+}
+.left-5 {
+  left: 5px;
+}
+.left-10 {
+  left: 10px;
+}
+.left-20 {
+  left: 20px;
+}
+/***** Sizes ******/
+.full-width {
+  width: 100%;
+}
+.full-height {
+  height: 100%;
+}
+/***** Rotate ******/
+.rot-45 {
+  transform: rotate(45deg);
+}
+.rot-45i {
+  transform: rotate(-45deg);
+}
+.rot-90 {
+  transform: rotate(90deg);
+}
+.rot-90i {
+  transform: rotate(-90deg);
+}
+/***** Stroke *****/
+.stroke-op-50 {
+  stroke-opacity: 0.5;
+}
+/***** Bootstrap add-ons *****/
+.no-caret.dropdown-toggle::after {
+  display: none;
+}
+.pointer:hover {
+  cursor: pointer;
+}
