@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Card, CardHeader, CardBody, Input, Button } from 'reactstrap';
 import { Redirect } from 'react-router-dom'
 import { Loading } from './Loading'
+import { Alert } from './Alert';
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -13,7 +14,8 @@ export class Home extends Component {
     name: '',
     redirect: false,
     data: null,
-    loaded: null
+    loaded: null,
+    alert: null
   }
 
   OnRoomChange = (event) => {
@@ -30,63 +32,78 @@ export class Home extends Component {
   }
 
   CreateRoom = async (event) => {
-    const url = `api/room/`
+    try {
+      const url = `api/room/`
 
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ room: this.state.room, name: this.state.name })
-    };
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room: this.state.room, name: this.state.name })
+      };
 
-    const response = await fetch(url, requestOptions);
-    const data = await response.json();
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
 
-    await this.setState({
-      ...this.state,
-      data: data,
-    })
-    const roomId = data.identifier;
-    const memberId = data.members[0].identifier;
-
-    this.setState({
-      ...this.state,
-      redirect: `/room/${roomId}/${memberId}`
-    });
-  }
-  JoinRoom = async (event) => {
-    const { roomId, name } = this.state
-    const url = `api/room/${roomId}/join`
-
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name })
-    };
-
-    const response = await fetch(url, requestOptions);
-    const data = await response.json();
-    if(response.status == 404)
-    {
-      var message = data.message
-      if(!message) {
-        message = "Joining failed"
-      }
+      await this.setState({
+        ...this.state,
+        data: data,
+      })
+      const roomId = data.identifier;
+      const memberId = data.members[0].identifier;
 
       this.setState({
         ...this.state,
-        alert: {
-          message: message,
-          type: 'danger'
-        }
+        redirect: `/room/${roomId}/${memberId}`
+      });
+    }
+    catch {
+      this.setState({
+        ...this.state,
+        alert: { color: 'danger', message: 'Something went wrong... The service seems to be offline... =(' }
       })
     }
+  }
+  JoinRoom = async (event) => {
+    try {
+      const { roomId, name } = this.state
+      const url = `api/room/${roomId}/join`
 
-    const memberId = data.identifier;
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name })
+      };
 
-    this.setState({
-      ...this.state,
-      redirect: `/room/${roomId}/${memberId}`
-    });
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      if (response.status == 404) {
+        var message = data.message
+        if (!message) {
+          message = "Joining failed"
+        }
+
+        this.setState({
+          ...this.state,
+          alert: {
+            message: message,
+            color: 'danger'
+          }
+        })
+      }
+
+      const memberId = data.identifier;
+
+      this.setState({
+        ...this.state,
+        redirect: `/room/${roomId}/${memberId}`
+      });
+    }
+    catch {
+      this.setState({
+        ...this.state,
+        alert: { color: 'danger', message: 'Something went wrong... The service seems to be offline... =(' }
+      })
+    }
   }
   CheckCreateButton = () => {
     return this.state.name == '' || this.state.room == '';
@@ -101,15 +118,23 @@ export class Home extends Component {
     const { roomId } = this.props.match.params
     if (roomId) {
       const response = await fetch(`api/room/${roomId}`);
-      console.log(response)
-      const data = await response.json();
-      console.log(data)
-
-      this.setState({
-        ...this.state,
-        roomId: roomId,
-        room: data.name,
-      })
+      if (response.status == 200) {
+        const data = await response.json();
+        this.setState({
+          ...this.state,
+          roomId: roomId,
+          room: data.name,
+        })
+      }
+      else {
+        this.setState({
+          ...this.state,
+          alert: {
+            message: 'Room not found... maybe it no longer exists...',
+            color: 'warning'
+          }
+        })
+      }
     }
   }
 
@@ -121,11 +146,12 @@ export class Home extends Component {
   }
 
   render() {
-    const { loaded } = this.state
+    const { loaded, alert } = this.state
     return (
       <div>
         {!loaded ? <Loading /> : (
           <Row>
+            {alert ? <Alert alert={alert} /> : null}
             {this.RenderRedirect()}
             <Col>
               <Card>

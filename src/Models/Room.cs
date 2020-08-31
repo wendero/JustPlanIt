@@ -18,5 +18,6 @@ namespace JustPlanIt.Models
         public int[] Deck { get; } = FibonacciDeck;
         public List<Member> Members { get; set; } = new List<Member>();
         public List<Story> Stories { get; set; } = new List<Story>();
+        public bool IsClosing { get; set; } = false;
     }
 }

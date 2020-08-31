@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using JustPlanIt.Models;
 using JustPlanIt.Classes;
+using System.Threading.Tasks;
 
 namespace JustPlanIt.Controllers
 {
@@ -56,7 +57,7 @@ namespace JustPlanIt.Controllers
             }
 
             var room = new Room() { Name = body.Room };
-            
+
             room.Members.Add(new Member() { Name = body.Name, Leader = true });
             this.Rooms.Add(room);
 
@@ -90,11 +91,21 @@ namespace JustPlanIt.Controllers
             {
                 return new NotFoundObjectResult(new { Message = "This session no longer exists" });
             }
+            room.IsClosing = true;
+
+            CloseRoomAsync(room.Identifier);
+
+            return room;
+        }
+        private async void CloseRoomAsync(int roomId)
+        {
+            await Task.Delay(10000);
+
+            var room = this.Rooms.FirstOrDefault(w => w.Identifier == roomId);
 
             this.Rooms.Remove(room);
-            return true;
         }
-        
+
         public class RoomApiModel
         {
             public string Room { get; set; }

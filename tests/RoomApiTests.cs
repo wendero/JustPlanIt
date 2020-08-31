@@ -143,21 +143,22 @@ namespace JustPlanIt.Tests
 
             Assert.AreEqual("true", resultsGet);
 
-            var responseClose = await _client.DeleteAsync(string.Format($"{API_URL}/{room.Identifier}"));
+            var responseClosingRoom = await _client.DeleteAsync(string.Format($"{API_URL}/{room.Identifier}"));
 
-            Assert.That(responseClose.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(responseClosingRoom.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            var resultsClose = responseClose.Content.ReadAsStringAsync().Result;
+            var resultsClosingRoom = responseClosingRoom.Content.ReadJson<JustPlanIt.Models.Room>();
 
-            Assert.AreEqual("true", resultsClose);
+            Assert.AreEqual(true, resultsClosingRoom.IsClosing);
 
-            responseGet = await _client.GetAsync(string.Format($"{API_URL}/{room.Identifier}/check"));
+            HttpResponseMessage responseGetClosingRoom;
 
-            Assert.That(responseGet.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            do
+            {
+                 responseGetClosingRoom = await _client.GetAsync(string.Format($"{API_URL}/{room.Identifier}"));
+            } while (responseGetClosingRoom.StatusCode == HttpStatusCode.OK);
 
-            resultsGet = responseGet.Content.ReadAsStringAsync().Result;
-
-            Assert.AreEqual("false", resultsGet);
+            Assert.That(responseGetClosingRoom.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
         [TestCase("12346", HttpStatusCode.NotFound)]
         public async Task CloseRoom_InvalidRoom_FalseWithObject(string roomValue, HttpStatusCode expectedHttpCode)

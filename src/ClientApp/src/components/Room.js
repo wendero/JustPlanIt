@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Row, Col, Card, CardHeader, CardBody, Input, ListGroup, ListGroupItem, Badge, Button, InputGroupAddon, InputGroup } from 'reactstrap'
 import { Loading } from "./Loading"
+import { Alert } from "./Alert"
+import { Toast, ToastBody, ToastHeader } from 'reactstrap';
 
 export class Room extends Component {
   timer = null
@@ -13,6 +15,7 @@ export class Room extends Component {
     voting: false,
     adding: false,
     url: null,
+    alert: null
   }
 
   componentWillMount = async () => {
@@ -29,36 +32,46 @@ export class Room extends Component {
     this.loadData()
   }
   loadData = async () => {
-    const { roomId, memberId, closing, results } = this.state
-    if (closing) {
+    const { roomId, memberId, isClosing, results } = this.state
+    if (isClosing) {
       clearInterval(this.timer)
       return
     }
 
     const response = await fetch(`api/room/${roomId}`)
-    const data = await response.json()
-    const leader = data.members.filter(f => f.leader)
-    const votingStory = data.stories.filter(f => f.status == 2)
-    const resultStory = data.stories.filter(f => f.status == 4)
+    if (response.status == 200) {
+      const data = await response.json()
+      const isClosing = data.isClosing;
+      const leader = data.members.filter(f => f.leader)
+      const votingStory = data.stories.filter(f => f.status == 2)
+      const resultStory = data.stories.filter(f => f.status == 4)
 
-    await this.setState({
-      ...this.state,
-      memberId: memberId,
-      roomId: roomId,
-      data: data,
-      leader: leader ? leader[0].identifier : null,
-      voting: votingStory != null ? votingStory[0] : false,
-    })
+      await this.setState({
+        ...this.state,
+        memberId: memberId,
+        roomId: roomId,
+        data: data,
+        leader: leader ? leader[0].identifier : null,
+        voting: votingStory != null ? votingStory[0] : false,
+        isClosing: isClosing,
+      })
 
-    if (resultStory != null && resultStory.length > 0) {
-      if (!results) {
-        await this.showResults(resultStory[0].identifier)
+      if (resultStory != null && resultStory.length > 0) {
+        if (!results) {
+          await this.showResults(resultStory[0].identifier)
+        }
+      }
+      else {
+        await this.setState({
+          ...this.state,
+          results: null,
+        })
       }
     }
     else {
-      await this.setState({
+      this.setState({
         ...this.state,
-        results: null,
+        alert: { color: 'danger', message: 'Something went wrong... The service seems to be offline... =(' }
       })
     }
   }
@@ -104,30 +117,41 @@ export class Room extends Component {
   }
   closeRoom = async () => {
     const { roomId } = this.state
-    this.setState({
-      ...this.state,
-      closing: true
-    })
     const url = `api/room/${roomId}`
 
     const requestOptions = {
       method: 'DELETE',
     }
-    const response = await fetch(url, requestOptions)
 
-    if (response.status == 200) {
-      this.props.history.push('/')
-    }
+    let response = await fetch(url, requestOptions)
   }
 
   render = () => {
-    const { data, leader, memberId, voting, results } = this.state
+    const { data, leader, memberId, voting, results, alert, isClosing } = this.state
     const amILeader = leader == memberId
+
+    if (isClosing) {
+      return (
+        <div>
+          <div className="p-3 my-2 rounded d-flex justify-content-center align-items-center" style={{ minHeight: 200 }}>
+            <Toast>
+              <ToastHeader>
+                This room was closed by the leader
+              </ToastHeader>
+              <ToastBody>
+                Thank you for planning with JustPlanIt =)
+              </ToastBody>
+            </Toast>
+          </div>
+        </div>
+      )
+    }
 
     return (
       <div>
         {!data ? <Loading /> : (
           <div>
+            {alert ? <Alert alert={alert} /> : null}
             <h1>{data.name}</h1>
             {voting ? <h3 className="bg-info rounded p-2 color-white">{voting.title}</h3> : results ? <h3 className="bg-success rounded p-2 color-white">{results.story.title}</h3> : <h3 className="p-2">&nbsp;</h3>}
             <Row>
